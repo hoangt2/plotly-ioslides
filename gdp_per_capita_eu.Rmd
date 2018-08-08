@@ -1,0 +1,41 @@
+---
+title: "Week 3 Assignment"
+author: "Tung Hoang"
+date: "8 August 2018"
+output: ioslides_presentation
+font_adjustment: -5
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Plotly
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(plotly)
+gdp <- read.csv('gdp_per_capita_eu.csv', fileEncoding="UTF-8-BOM")
+gdp$gdp_per_capita_usd <- as.numeric(gdp$gdp_per_capita_usd)
+
+# specify some map projection/options
+g <- list(
+  resolution = 50,
+  scope = 'europe',
+  projection = list(type = 'Mercator')
+)
+
+p <- plot_geo(gdp) %>%
+  add_trace(
+    z = ~gdp_per_capita_usd,text = ~country, locations = ~code,
+    color = ~gdp_per_capita_usd, colors = 'Blues'
+  ) %>%
+  colorbar(title = "USD") %>%
+  layout(
+    title = 'Map of European countries by 2018 GPD (PPP) per capita (USD)',
+    geo = g
+  )
+
+p
+```
+<font size="2">An interactive map with data for 2018 from the IMF, using GDP based on purchasing power parity (PPP) per capita, shown in current international dollars (source: Wikipedia)</font>
